@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiting Boost - Nachrichten</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background: #ffffff;
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #e5e5e7;
+        }
+
+        .logo {
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .logo-text span {
+            color: #86868b;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #86868b;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .nav-item.active {
+            background: #000;
+            color: #fff;
+            font-weight: 500;
+            border-radius: 12px;
+            margin: 0 10px;
+            padding: 12px 16px;
+        }
+
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+        }
+
+        .nav-divider {
+            margin: 20px 20px;
+            border-top: 1px solid #e5e5e7;
+        }
+
+        /* Main Content */
+        .main-wrapper {
+            margin-left: 200px;
+            flex: 1;
+            padding: 24px;
+            max-width: 1400px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid #e5e5e7;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: #f5f5f7;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .date-time {
+            font-size: 14px;
+            color: #1d1d1f;
+            font-weight: 500;
+        }
+
+        .notification-btn, .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .notification-btn {
+            background: #fff;
+            border: 1px solid #e5e5e7;
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Filters */
+        .filters {
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: #f5f5f7;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #1d1d1f;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: #e5e5e7;
+        }
+
+        .filter-btn.active {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        /* Message Card */
+        .message-card {
+            background: #fff;
+            border: 1px solid #e5e5e7;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .message-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .message-card.unread {
+            background: #f9fafb;
+            border-color: #10b981;
+            border-width: 2px;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .message-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .message-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .message-icon.info {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .message-icon.warning {
+            background: rgba(251, 146, 60, 0.1);
+            color: #fb923c;
+        }
+
+        .message-icon.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .message-category {
+            font-size: 12px;
+            font-weight: 700;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        .message-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .message-text {
+            font-size: 14px;
+            color: #86868b;
+            line-height: 1.6;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            background: #f5f5f7;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #1d1d1f;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-small:hover {
+            background: #e5e5e7;
+        }
+
+        .btn-small.primary {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        .btn-small.primary:hover {
+            background: #1a1a1a;
+        }
+
+        .unread-badge {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+        }
+
+        /* Empty State */
+        .empty-state {
+            background: #fff;
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #86868b;
+        }
+
+        /* Chatbot */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .chatbot-widget:hover {
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-text">recruiting<span>boost</span></div>
+            </div>
+
+            <nav>
+                <a href="./dashboard-overview-v2.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    Übersicht
+                </a>
+                <a href="./vertrieb-sales.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    Vertrieb & Sales
+                </a>
+                <a href="./marketing.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    Marketing
+                </a>
+                <a href="./client-management.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Client-Management
+                </a>
+                <a href="./qualifizierung.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Qualifizierung
+                </a>
+                <a href="./website.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                    </svg>
+                    Website
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="./profil.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    Profil
+                </a>
+                <a href="./nachrichten.html" class="nav-item active">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    Nachrichten
+                </a>
+                <a href="./einstellungen.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Einstellungen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="page-title-section">
+                    <button class="back-button" onclick="window.location.href='./dashboard-overview-v2.html'">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h1 class="page-title">Benachrichtigungen</h1>
+                </div>
+                <div class="header-right">
+                    <div class="date-time">30 Nov. 2025, 08:00 Uhr</div>
+                    <button class="notification-btn">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                    </button>
+                    <div class="user-avatar">HM</div>
+                </div>
+            </header>
+
+            <!-- Filters -->
+            <div class="filters animate-in">
+                <button class="filter-btn active">Alle</button>
+                <button class="filter-btn">Marketing</button>
+                <button class="filter-btn">Sales</button>
+                <button class="filter-btn">Qualifizierung</button>
+                <button class="filter-btn">System</button>
+                <button class="filter-btn">Ungelesen</button>
+            </div>
+
+            <!-- Messages -->
+            <div class="messages-container">
+                <!-- Message 1 -->
+                <div class="message-card unread animate-in" style="animation-delay: 0.1s">
+                    <div class="message-header">
+                        <div class="message-icon success">✓</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">Marketing • LinkedIn</span>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="message-time">Vor 2 Stunden</span>
+                                    <div class="unread-badge"></div>
+                                </div>
+                            </div>
+                            <div class="message-title">LinkedIn-Kampagne hat 47 neue Leads generiert</div>
+                            <div class="message-text">Ihre "IT-Branche Outreach" Kampagne performt hervorragend! 47 neue qualifizierte Leads wurden in den letzten 24 Stunden generiert. Die Öffnungsrate liegt bei 73%.</div>
+                            <div class="message-actions">
+                                <button class="btn-small primary">Kampagne ansehen</button>
+                                <button class="btn-small">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 2 -->
+                <div class="message-card unread animate-in" style="animation-delay: 0.2s">
+                    <div class="message-header">
+                        <div class="message-icon info">🎯</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">Qualifizierung</span>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="message-time">Vor 3 Stunden</span>
+                                    <div class="unread-badge"></div>
+                                </div>
+                            </div>
+                            <div class="message-title">12 Kandidaten warten auf Ihre Freigabe</div>
+                            <div class="message-text">Das KI-Assessment-Center hat 12 neue Kandidaten für Mardo Ambulanter Pflegedienst qualifiziert. Durchschnittlicher Match-Score: 88%.</div>
+                            <div class="message-actions">
+                                <button class="btn-small primary">Kandidaten prüfen</button>
+                                <button class="btn-small">Später</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 3 -->
+                <div class="message-card animate-in" style="animation-delay: 0.3s">
+                    <div class="message-header">
+                        <div class="message-icon success">📈</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">Website</span>
+                                <span class="message-time">Vor 5 Stunden</span>
+                            </div>
+                            <div class="message-title">Website-Traffic +32% über Durchschnitt</div>
+                            <div class="message-text">Heute bereits 2.847 Besucher auf Ihrer Website - das sind 32% mehr als der Tagesdurchschnitt. 89 B2B-Firmen wurden identifiziert.</div>
+                            <div class="message-actions">
+                                <button class="btn-small">Statistiken ansehen</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 4 -->
+                <div class="message-card animate-in" style="animation-delay: 0.4s">
+                    <div class="message-header">
+                        <div class="message-icon info">💼</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">Client • IT-Haus Kulmer</span>
+                                <span class="message-time">Gestern, 10:12</span>
+                            </div>
+                            <div class="message-title">Kunde hat 5 neue Stellenanzeigen hochgeladen</div>
+                            <div class="message-text">IT-Haus Kulmer hat 5 neue offene Stellen für Software-Entwickler gemeldet. KI-Agenten sind bereits konfiguriert und aktiv.</div>
+                            <div class="message-actions">
+                                <button class="btn-small">Stellen ansehen</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 5 -->
+                <div class="message-card animate-in" style="animation-delay: 0.5s">
+                    <div class="message-header">
+                        <div class="message-icon warning">⚠️</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">Sales • Follow-up</span>
+                                <span class="message-time">Gestern, 16:30</span>
+                            </div>
+                            <div class="message-title">Angebot für Müller Recruiting noch nicht geöffnet</div>
+                            <div class="message-text">Das Angebot vom 27.11. wurde noch nicht geöffnet. Empfehlung: Follow-up Call vereinbaren.</div>
+                            <div class="message-actions">
+                                <button class="btn-small primary">Call planen</button>
+                                <button class="btn-small">Erinnerung senden</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 6 -->
+                <div class="message-card animate-in" style="animation-delay: 0.6s">
+                    <div class="message-header">
+                        <div class="message-icon success">✨</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">SEO</span>
+                                <span class="message-time">Gestern, 14:20</span>
+                            </div>
+                            <div class="message-title">3 Keywords auf erste Seite aufgestiegen</div>
+                            <div class="message-text">"Recruiting Agentur IT" ist von Position #5 auf #3 gestiegen. "Healthcare Recruiting" und "Personalvermittlung Pflege" ebenfalls verbessert.</div>
+                            <div class="message-actions">
+                                <button class="btn-small">SEO-Report ansehen</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 7 -->
+                <div class="message-card animate-in" style="animation-delay: 0.7s">
+                    <div class="message-header">
+                        <div class="message-icon info">🔔</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">System</span>
+                                <span class="message-time">28.11.2025</span>
+                            </div>
+                            <div class="message-title">Strategy Call morgen um 14:00 Uhr</div>
+                            <div class="message-text">Ihr monatlicher Strategy Call mit unserem Team findet morgen statt. Agenda: Performance-Review, Q1 2026 Planung, SEO-Optimierung.</div>
+                            <div class="message-actions">
+                                <button class="btn-small">Zur Agenda</button>
+                                <button class="btn-small">Umbuchen</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message 8 -->
+                <div class="message-card animate-in" style="animation-delay: 0.8s">
+                    <div class="message-header">
+                        <div class="message-icon success">🎉</div>
+                        <div class="message-content">
+                            <div class="message-meta">
+                                <span class="message-category">Client • Pflege Nidas</span>
+                                <span class="message-time">27.11.2025</span>
+                            </div>
+                            <div class="message-title">Onboarding fast abgeschlossen (85%)</div>
+                            <div class="message-text">Pflege Nidas GmbH ist fast fertig mit dem Onboarding-Prozess. Letzte Schritte: Final Testing und Go-Live Freigabe.</div>
+                            <div class="message-actions">
+                                <button class="btn-small">Onboarding-Status</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Chatbot -->
+        <div class="chatbot-widget">💬</div>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const formatted = now.toLocaleDateString('de-DE', options).replace('.', '');
+            document.querySelector('.date-time').textContent = formatted + ' Uhr';
+        }
+        
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Message cards
+        document.querySelectorAll('.message-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('btn-small')) {
+                    this.classList.remove('unread');
+                    const badge = this.querySelector('.unread-badge');
+                    if (badge) badge.remove();
+                }
+            });
+        });
+
+        // Action buttons
+        document.querySelectorAll('.btn-small').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                alert(`Feature "${this.textContent.trim()}" wird geöffnet...`);
+            });
+        });
+
+        document.querySelector('.chatbot-widget').addEventListener('click', () => {
+            alert('Chatbot wird geöffnet...');
+        });
+    </script>
+</body>
+</html>

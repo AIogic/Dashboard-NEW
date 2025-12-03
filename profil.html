@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiting Boost - Profil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background: #ffffff;
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #e5e5e7;
+        }
+
+        .logo {
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .logo-text span {
+            color: #86868b;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #86868b;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .nav-item.active {
+            background: #000;
+            color: #fff;
+            font-weight: 500;
+            border-radius: 12px;
+            margin: 0 10px;
+            padding: 12px 16px;
+        }
+
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+        }
+
+        .nav-divider {
+            margin: 20px 20px;
+            border-top: 1px solid #e5e5e7;
+        }
+
+        /* Main Content */
+        .main-wrapper {
+            margin-left: 200px;
+            flex: 1;
+            padding: 24px;
+            max-width: 1200px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid #e5e5e7;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: #f5f5f7;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .date-time {
+            font-size: 14px;
+            color: #1d1d1f;
+            font-weight: 500;
+        }
+
+        .notification-btn, .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .notification-btn {
+            background: #fff;
+            border: 1px solid #e5e5e7;
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Profile Header Card */
+        .profile-header {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+            border-radius: 50%;
+        }
+
+        .profile-avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-info {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 16px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 12px;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.pro {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .badge.verified {
+            background: rgba(99, 102, 241, 0.15);
+            color: #6366f1;
+        }
+
+        /* Section */
+        .section {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 24px;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d1d1f;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            padding: 14px 16px;
+            background: #f5f5f7;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #1d1d1f;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #10b981;
+            background: #fff;
+        }
+
+        .form-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #f5f5f7;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Subscription Card */
+        .subscription-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 20px;
+            padding: 32px;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .subscription-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .subscription-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .subscription-price {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .subscription-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #fff;
+            color: #10b981;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            padding: 14px 24px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #1a1a1a;
+        }
+
+        .btn-danger {
+            padding: 14px 24px;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Chatbot */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .chatbot-widget:hover {
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-text">recruiting<span>boost</span></div>
+            </div>
+
+            <nav>
+                <a href="./dashboard-overview-v2.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    Übersicht
+                </a>
+                <a href="./vertrieb-sales.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    Vertrieb & Sales
+                </a>
+                <a href="./marketing.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    Marketing
+                </a>
+                <a href="./client-management.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Client-Management
+                </a>
+                <a href="./qualifizierung.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Qualifizierung
+                </a>
+                <a href="./website.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                    </svg>
+                    Website
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="./profil.html" class="nav-item active">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    Profil
+                </a>
+                <a href="./nachrichten.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    Nachrichten
+                </a>
+                <a href="./einstellungen.html" class="nav-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Einstellungen
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="page-title-section">
+                    <button class="back-button" onclick="window.location.href='./dashboard-overview-v2.html'">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h1 class="page-title">Mein Profil</h1>
+                </div>
+                <div class="header-right">
+                    <div class="date-time">30 Nov. 2025, 08:00 Uhr</div>
+                    <button class="notification-btn">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                    </button>
+                    <div class="user-avatar">HM</div>
+                </div>
+            </header>
+
+            <!-- Profile Header -->
+            <div class="profile-header animate-in">
+                <div class="profile-avatar-large">HM</div>
+                <div class="profile-info">
+                    <div class="profile-name">Herr Meyer</div>
+                    <div class="profile-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7afe9aaa2bea2b587b5a2a4b5b2aeb3aea9a0eaa6a0a2a9b3b2b5e9a3a2">[email&#160;protected]</a></div>
+                    <div class="profile-badges">
+                        <span class="badge pro">Pro Plan</span>
+                        <span class="badge verified">Verifiziert</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Stats -->
+            <div class="section animate-in" style="animation-delay: 0.1s">
+                <div class="section-title">Ihr Account</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Aktive Kunden</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">234</div>
+                        <div class="stat-label">Leads (Monat)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24.500€</div>
+                        <div class="stat-label">MRR</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscription -->
+            <div class="subscription-card animate-in" style="animation-delay: 0.2s">
+                <div class="subscription-header">
+                    <div>
+                        <div class="subscription-title">Pro Plan</div>
+                        <div class="subscription-subtitle">Unbegrenzte Nutzung aller Features</div>
+                    </div>
+                    <div class="subscription-price">2.499€</div>
+                </div>
+                <div class="subscription-features">
+                    <div class="feature-item">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/>
+                        </svg>
+                        Unbegrenzte Kampagnen
+                    </div>
+                    <div class="feature-item">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/>
+                        </svg>
+                        KI-Assessment-Center
+                    </div>
+                    <div class="feature-item">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/>
+                        </svg>
+                        Personalisierte Videos
+                    </div>
+                    <div class="feature-item">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/>
+                        </svg>
+                        Priority Support
+                    </div>
+                    <div class="feature-item">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/>
+                        </svg>
+                        Dedizierter Account Manager
+                    </div>
+                    <div class="feature-item">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/>
+                        </svg>
+                        Monatliche Strategy Calls
+                    </div>
+                </div>
+                <button class="btn-primary">Plan verwalten</button>
+            </div>
+
+            <!-- Personal Info -->
+            <div class="section animate-in" style="animation-delay: 0.3s">
+                <div class="section-title">Persönliche Informationen</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Vorname</label>
+                        <input type="text" class="form-input" value="Herr" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nachname</label>
+                        <input type="text" class="form-input" value="Meyer" disabled>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">E-Mail</label>
+                        <input type="email" class="form-input" value="h.meyer@recruiting-agentur.de" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefon</label>
+                        <input type="tel" class="form-input" value="+49 123 456789" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Position</label>
+                        <input type="text" class="form-input" value="Geschäftsführer" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Info -->
+            <div class="section animate-in" style="animation-delay: 0.4s">
+                <div class="section-title">Unternehmensinformationen</div>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label class="form-label">Firmenname</label>
+                        <input type="text" class="form-input" value="Meyer Recruiting Agentur GmbH" disabled>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Adresse</label>
+                        <input type="text" class="form-input" value="Musterstraße 123, 10115 Berlin" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Umsatzsteuer-ID</label>
+                        <input type="text" class="form-input" value="DE123456789" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Handelsregisternummer</label>
+                        <input type="text" class="form-input" value="HRB 12345" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="section animate-in" style="animation-delay: 0.5s">
+                <div class="section-title">Account-Aktionen</div>
+                <div style="display: flex; gap: 16px;">
+                    <button class="btn-secondary">Passwort ändern</button>
+                    <button class="btn-danger">Account löschen</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Chatbot -->
+        <div class="chatbot-widget">💬</div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const formatted = now.toLocaleDateString('de-DE', options).replace('.', '');
+            document.querySelector('.date-time').textContent = formatted + ' Uhr';
+        }
+        
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+
+        document.querySelector('.chatbot-widget').addEventListener('click', () => {
+            alert('Chatbot wird geöffnet...');
+        });
+
+        document.querySelectorAll('.btn-primary, 
